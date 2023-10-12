@@ -22,14 +22,14 @@ namespace ManPageMangler
                 .GetProperties()
                 .Where(p => p.GetCustomAttribute<OptionAttribute>() != null)
                 .Select(p => (p, p.GetCustomAttribute<OptionAttribute>()!))
-                .Select(p => new OptionManual(p.Item1.Name, p.Item2.ShortName, p.Item2.LongName, p.Item2.HelpText))
+                .Select(p => new OptionManual(p.p.Name, p.Item2.ShortName, p.Item2.LongName, p.Item2.HelpText))
                 .ToArray();
 
             var verb = classType.GetCustomAttribute<VerbAttribute>();
             return new ClassManual(classType.Name, options, verb?.Name, verb?.HelpText);
         }
 
-        private static string[] GetManualLines(ClassManual classMan)
+        private static string[] GetReadMeLines(ClassManual classMan)
         {
             var result = new List<string>
             {
@@ -39,10 +39,11 @@ namespace ManPageMangler
                 ""
             };
             // todo
-            return result;
+            return result.ToArray();
         }
 
         public record ClassManual(string ClassName, OptionManual[] Options, string? VerbName, string? HelpText);
         public record OptionManual(string PropertyName, string? ShortName, string? LongName, string HelpText);
+
     }
 }
